@@ -5,7 +5,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.*;
+import android.location.Geocoder;
+import android.location.Address;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,19 +31,27 @@ public class ResultActivity extends Activity implements OnClickListener {
 		final Geocoder geocoder = new Geocoder(this);
 		
 		Intent i = getIntent();
-		String ZIP = i.getStringExtra(MainActivity.EXTRA_MESSAGE);
+		String location = i.getStringExtra(MainActivity.EXTRA_MESSAGE);
 		try
 		{
-			List<Address> addresses = geocoder.getFromLocationName(ZIP, 1);
+			List<Address> addresses = geocoder.getFromLocationName(location, 1);
 			if(addresses != null && !addresses.isEmpty())
 			{
 				Address address = addresses.get(0);
-				String message = String.format("%s", address.getLocality());
+				String message = "";
+				if(address.getLocality() != null)
+				{
+					message = String.format("%s", address.getLocality());
+				}
+				else
+				{
+					message = "Unable to locate";
+				}
 				resultView.setText(message);
 			}
 			else
 			{
-				resultView.setText("Unable to locate ZIP");
+				resultView.setText("Unable to locate");
 			}
 		}
 		catch (IOException e)
