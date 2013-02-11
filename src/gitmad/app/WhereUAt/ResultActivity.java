@@ -47,7 +47,7 @@ public class ResultActivity extends Activity implements OnClickListener {
 		}
 		catch (IOException e)
 		{
-			
+			Log.d("Demo", "IOException");
 		}
 	}
 	

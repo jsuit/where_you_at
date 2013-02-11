@@ -1,0 +1,60 @@
+#Geocoding
+
+##Idea
+
+Today we're going to add some new functionality to our Where-U-At app. The goal for today is to enter a ZIP code and have our app tell us where u at.
+
+We're going to use the Geocoder library to convert a ZIP code to a Locality (basically the name of a town or city).
+
+The first thing we'll add is our text box to accept a ZIP code.
+
+##Code
+
+###Layout
+
+**EditText**
+
+The only addition to our layout is our ZIP code text box, implemented as an EditText object.
+
+	<EditText
+            android:id="@+id/editText1"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10" 
+            android:hint="@string/edit_ZIP"/>
+
+###MainActivity
+
+**onClick**
+
+	EditText editText = (EditText)findViewById(R.id.editText1);
+	String message = editText.getText().toString();
+	i.putExtra(EXTRA_MESSAGE, message);
+	
+###ResultActivity
+
+**onCreate**
+
+	final Geocoder geocoder = new Geocoder(this);
+		
+	Intent i = getIntent();
+	String ZIP = i.getStringExtra(MainActivity.EXTRA_MESSAGE);
+	try
+	{
+		List<Address> addresses = geocoder.getFromLocationName(ZIP, 1);
+		if(addresses != null && !addresses.isEmpty())
+		{
+			Address address = addresses.get(0);
+			String message = String.format("%s", address.getLocality());
+			resultView.setText(message);
+		}
+		else
+		{
+			resultView.setText("Unable to locate ZIP");
+		}
+	}
+	catch (IOException e)
+	{
+		Log.d("Demo", "IOException");
+	}
