@@ -34,7 +34,8 @@ public class ResultActivity extends Activity implements OnClickListener {
 		String location = i.getStringExtra(MainActivity.EXTRA_MESSAGE);
 		try
 		{
-			List<Address> addresses = geocoder.getFromLocationName(location, 1);
+			List<Address> addresses = geocoder.getFromLocationName(location, 5);
+			
 			if(addresses != null && !addresses.isEmpty())
 			{
 				Address address = addresses.get(0);
@@ -42,6 +43,7 @@ public class ResultActivity extends Activity implements OnClickListener {
 				if(address.getLocality() != null)
 				{
 					message = String.format("%s", address.getLocality());
+					message += addresses.get(0).getPostalCode();
 				}
 				else
 				{
